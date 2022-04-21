@@ -1,0 +1,46 @@
+---
+# tasks file for datadisk
+- name: Create 1st partition on disk
+  parted:
+    device: "{{ diskpath1 }}"
+    state: present
+    number: 1
+    part_end: 4GB
+- name: Create 2nd partition on disk
+  parted:
+    device: "{{ diskpath1 }}"
+    state: present
+    number: 2
+    part_start: 4GB
+    part_end: 9GB
+- name: Create /part1 mount point
+  file:
+    path: /part1
+    state: directory
+    mode: '0755'
+- name: Map /part1 with xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/sdc1
+- name: Mounting volume on /part1
+  mount:
+    path: /part1
+    src: /dev/sdc1
+    fstype: xfs
+    state: mounted
+
+- name: Create /part2 mount point
+  file:
+    path: /part2
+    state: directory
+    mode: '0755'
+- name: Map /part2 with ext4 filesystem
+  filesystem:
+    fstype: ext4
+    dev: /dev/sdc2
+- name: Mounting volume on /part2
+  mount:
+    path: /part2
+    src: /dev/sdc2
+    fstype: ext4
+    state: mounted

@@ -1,0 +1,11 @@
+---
+# tasks file for system_profile
+- name: adding ssh session timeout to /etc/profile
+  blockinfile:
+    path: "{{ pathmount }}"
+    insertafter: EOF
+    backup: yes
+    state: present
+    block: |
+      export "#This is a test block added by Ansible…… n01476579"
+      export TMOUT=1800
